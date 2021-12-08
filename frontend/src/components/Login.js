@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { BASE_URL } from "../api";
 
 const Login = () => {
+  let navigate = useNavigate();
   const [userData, setUserData] = useState({});
 
   const handleChange = (e) => {
@@ -21,6 +23,7 @@ const Login = () => {
         headers,
       });
       localStorage.setItem("token", data.data.token);
+      navigate("/profile");
     } catch (error) {
       console.log(error.response.data);
     }
