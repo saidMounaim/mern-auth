@@ -46,6 +46,28 @@ export const loginUser = asyncHandler(async (req, res) => {
       fullName: user.fullName,
       username: user.username,
       email: user.email,
+      token: generateToken(user._id),
     },
   });
+});
+
+// @DESC Get User Logged in
+// @ROUTE /api/users/getMe
+// @METHOD GET
+export const getMe = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+
+  if (!user) {
+    res.status(401);
+    throw new Error("User not found");
+  } else {
+    res.status(201).json({
+      success: true,
+      data: {
+        id: user._id,
+        fullName: user.fullName,
+        email: user.email,
+      },
+    });
+  }
 });
