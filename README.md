@@ -1,6 +1,6 @@
 # mern-auth
 
-Minimal full-stack MERN app with authentication using JWTs.
+Minimal full-stack MERN authentication using JWTs.
 
 ## Technology Stack:
 
