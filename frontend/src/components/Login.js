@@ -1,65 +1,54 @@
 import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
 import { BASE_URL } from "../api";
 
-const Register = () => {
+const Login = () => {
   let navigate = useNavigate();
-  const [userData, setUserData] = useState({});
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setUserData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
       let headers = { "content-type": "application/json" };
-      const { data } = await axios.post(`${BASE_URL}/users`, userData, {
-        headers,
-      });
+      const { data } = await axios.post(
+        `${BASE_URL}/users/login`,
+        { email, password },
+        headers
+      );
+
+      setError("");
       localStorage.setItem("userInfo", JSON.stringify(data.data));
       navigate("/profile");
     } catch (error) {
       console.log(error.response.data);
+      setError(error.response.data.message);
     }
   };
 
   return (
     <div className="login-page">
       <div className="form">
+        <p>{error}</p>
         <form onSubmit={handleSubmit} className="register-form">
-          <input
-            type="text"
-            name="fullName"
-            onChange={handleChange}
-            placeholder="Full Name"
-          />
-          <input
-            type="text"
-            name="username"
-            onChange={handleChange}
-            placeholder="Username"
-          />
           <input
             type="email"
             name="email"
-            onChange={handleChange}
+            onChange={(e) => setEmail(e.target.value)}
             placeholder="Email address"
           />
           <input
             type="password"
             name="password"
-            onChange={handleChange}
+            onChange={(e) => setPassword(e.target.value)}
             placeholder="Password"
           />
-          <button type="submit">create</button>
+          <button type="submit">login</button>
           <p className="message">
-            Already registered? <Link to="/login">Sign In</Link>
+            not registered? <Link to="/">Sign up</Link>
           </p>
         </form>
       </div>
@@ -67,4 +56,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default Login;
